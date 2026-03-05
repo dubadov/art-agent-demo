@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
@@ -19,7 +20,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🎨</span>
+            <Image
+              src="/art-agent-logo.png"
+              alt="ArtAgent logo"
+              width={32}
+              height={32}
+              className="rounded-md"
+            />
             <span className="text-xl font-bold tracking-tight">
               Art<span className="text-[var(--color-accent)]">Agent</span>
             </span>
