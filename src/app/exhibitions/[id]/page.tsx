@@ -34,6 +34,7 @@ export default async function ExhibitionDetailPage({ params }: { params: Promise
       title={exhibition.title}
       titleEn={exhibition.titleEn}
       subtitle={`${exhibition.venue} • ${exhibition.city}`}
+      heroImage={exhibition.galleryImages?.[0]}
       fullDescription={exhibition.fullDescription || exhibition.description}
       highlights={exhibition.highlights || []}
       galleryImages={exhibition.galleryImages || []}

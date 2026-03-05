@@ -29,6 +29,7 @@ export default async function ArtistDetailPage({ params }: { params: Promise<{ i
       title={artist.name}
       titleEn={artist.nameEn}
       subtitle={artist.medium}
+      heroImage={artist.galleryImages?.[0]}
       fullDescription={artist.fullDescription || artist.bio}
       highlights={artist.highlights || []}
       galleryImages={artist.galleryImages || []}

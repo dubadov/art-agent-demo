@@ -29,6 +29,7 @@ export default async function GalleryDetailPage({ params }: { params: Promise<{ 
       title={gallery.name}
       titleEn={gallery.nameEn}
       subtitle={`${gallery.city} • ${gallery.type}`}
+      heroImage={gallery.galleryImages?.[0]}
       fullDescription={gallery.fullDescription || gallery.description}
       highlights={gallery.highlights || []}
       galleryImages={gallery.galleryImages || []}
