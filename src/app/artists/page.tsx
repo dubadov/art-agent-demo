@@ -1,15 +1,52 @@
 "use client";
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import artists from "@/data/artists.json";
 import SearchFilter from "../components/SearchFilter";
 
+type ArtistItem = (typeof artists)[number] & { topFeatured?: boolean };
+
+const TOP_IDS = [3, 1, 4];
 const mediums = [...new Set(artists.flatMap((a) => a.medium.split(", ")))].sort();
 const mediumOptions = mediums.map((m) => ({ value: m, label: m }));
+
+function HeroCard({ artist }: { artist: ArtistItem }) {
+  const initials = artist.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2);
+
+  return (
+    <Link href={`/artists/${artist.id}`} className="group">
+      <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden card-hover">
+        <div className="relative h-56 overflow-hidden">
+          <div className="image-placeholder w-full h-full text-4xl group-hover:scale-105 transition-transform duration-500">
+            {initials}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute bottom-3 right-3 left-3 flex justify-between items-end">
+            <span className="text-xs bg-black/50 text-white px-2 py-1 rounded-full backdrop-blur-sm">
+              {artist.medium}
+            </span>
+            <span className="text-xs bg-[var(--color-accent)]/90 text-white px-3 py-1 rounded-full backdrop-blur-sm">
+              צפה בדוח מלא ←
+            </span>
+          </div>
+        </div>
+        <div className="p-5">
+          <h3 className="font-bold text-xl text-gray-900 mb-1">{artist.name}</h3>
+          <p className="text-sm text-[var(--color-accent)] font-medium mb-1">{artist.nameEn}</p>
+          <p className="text-xs text-gray-500 mb-2">{artist.medium}</p>
+          <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">{artist.bio}</p>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default function ArtistsPage() {
   const [search, setSearch] = useState("");
   const [medium, setMedium] = useState("");
   const [expandedId, setExpandedId] = useState<number | null>(null);
+
+  const topArtists = (artists as ArtistItem[]).filter((a) => TOP_IDS.includes(a.id));
 
   const filtered = useMemo(() => {
     return artists.filter((a) => {
@@ -23,8 +60,7 @@ export default function ArtistsPage() {
     });
   }, [search, medium]);
 
-  const featured = filtered.filter((a) => a.featured);
-  const rest = filtered.filter((a) => !a.featured);
+  const remaining = filtered.filter((a) => !TOP_IDS.includes(a.id));
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -34,6 +70,18 @@ export default function ArtistsPage() {
           {artists.length} אמנים נמצאו על ידי הסוכן • מוצגים {filtered.length} תוצאות
         </p>
       </div>
+
+      {/* Top 3 Hero */}
+      {!search && !medium && (
+        <div className="mb-12">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">אמנים מובילים</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topArtists.map((a) => (
+              <HeroCard key={a.id} artist={a} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <SearchFilter
         searchPlaceholder="חפש אמן לפי שם, מדיום..."
@@ -49,33 +97,13 @@ export default function ArtistsPage() {
         ]}
       />
 
-      {/* Featured Artists */}
-      {featured.length > 0 && (
+      {remaining.length > 0 && (
         <>
           <h2 className="text-xl font-bold text-gray-800 mb-4">
-            20 האמנים המובילים ({featured.length})
+            {search || medium ? `תוצאות (${filtered.length})` : `כל האמנים (${remaining.length})`}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-            {featured.map((a) => (
-              <ArtistCard
-                key={a.id}
-                artist={a}
-                expanded={expandedId === a.id}
-                onToggle={() => setExpandedId(expandedId === a.id ? null : a.id)}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* Other Artists */}
-      {rest.length > 0 && (
-        <>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            אמנים נוספים ({rest.length})
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {rest.map((a) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {(search || medium ? filtered : remaining).map((a) => (
               <ArtistCard
                 key={a.id}
                 artist={a}
@@ -181,7 +209,7 @@ function ArtistCard({
                   className="text-blue-600 hover:underline text-xs"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  📖 ויקיפדיה
+                  Wikipedia
                 </a>
               </div>
             )}
