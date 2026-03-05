@@ -1,6 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import galleries from "@/data/galleries.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
@@ -80,7 +81,10 @@ export default function GalleriesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">🖼️ גלריות אמנות בישראל</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+          <Image src="/icon-galleries.png" alt="גלריות" width={36} height={36} />
+          גלריות אמנות בישראל
+        </h1>
         <p className="text-gray-500">
           {galleries.length} גלריות נמצאו על ידי הסוכן • מוצגות {filtered.length} תוצאות
         </p>

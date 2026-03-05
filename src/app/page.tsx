@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import museums from "@/data/museums.json";
 import galleries from "@/data/galleries.json";
 import exhibitions from "@/data/exhibitions.json";
@@ -7,9 +8,9 @@ import emails from "@/data/emails.json";
 
 const stats = [
   { label: "מוזיאונים", value: museums.length, icon: "🏛️", href: "/museums", color: "from-indigo-500 to-purple-600" },
-  { label: "גלריות", value: galleries.length, icon: "🖼️", href: "/galleries", color: "from-pink-500 to-rose-600" },
-  { label: "תערוכות", value: exhibitions.length, icon: "🎭", href: "/exhibitions", color: "from-amber-500 to-orange-600" },
-  { label: "אמנים", value: artists.length, icon: "🎨", href: "/artists", color: "from-emerald-500 to-teal-600" },
+  { label: "גלריות", value: galleries.length, icon: "/icon-galleries.png", href: "/galleries", color: "from-pink-500 to-rose-600" },
+  { label: "תערוכות", value: exhibitions.length, icon: "/icon-exhibitions.png", href: "/exhibitions", color: "from-amber-500 to-orange-600" },
+  { label: "אמנים", value: artists.length, icon: "/icon-artists.png", href: "/artists", color: "from-emerald-500 to-teal-600" },
   { label: "טיוטות מייל", value: `${emails.length} / ${artists.length}`, icon: "📧", href: "/outreach", color: "from-sky-500 to-blue-600" },
 ];
 
@@ -58,7 +59,13 @@ export default function Home() {
               href={s.href}
               className="bg-white rounded-2xl shadow-lg p-5 text-center card-hover border border-gray-100"
             >
-              <div className="text-3xl mb-2">{s.icon}</div>
+              <div className="text-3xl mb-2">
+                {s.icon.startsWith("/") ? (
+                  <Image src={s.icon} alt={s.label} width={36} height={36} className="mx-auto" />
+                ) : (
+                  s.icon
+                )}
+              </div>
               <div className="text-2xl font-bold text-gray-900">{s.value}</div>
               <div className="text-sm text-gray-500 mt-1">{s.label}</div>
             </Link>
