@@ -28,7 +28,7 @@ export default function SearchFilter({
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1 relative">
           <svg
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+            className="absolute inset-e-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -45,7 +45,7 @@ export default function SearchFilter({
             placeholder={searchPlaceholder}
             value={searchValue}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pr-10 pl-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent text-sm"
+            className="w-full pe-10 ps-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent text-sm"
           />
         </div>
 

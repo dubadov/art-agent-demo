@@ -148,7 +148,7 @@ export default function OutreachPage() {
       </div>
 
       {/* Remaining Banner */}
-      <div className="mt-8 bg-gradient-to-l from-[var(--color-surface)] to-[var(--color-surface-light)] rounded-2xl p-8 text-white text-center">
+      <div className="mt-8 bg-linear-to-r from-[var(--color-surface)] to-[var(--color-surface-light)] rounded-2xl p-8 text-white text-center">
         <div className="text-4xl mb-3">🎯</div>
         <h3 className="text-xl font-bold mb-2">
           עוד {remainingArtists} אמנים מחכים לפנייה מותאמת אישית

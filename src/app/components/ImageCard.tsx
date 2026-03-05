@@ -43,7 +43,7 @@ export default function ImageCard({
           </div>
         )}
         {badges && badges.length > 0 && (
-          <div className="absolute top-3 right-3 flex gap-2">
+          <div className="absolute top-3 inset-e-3 flex gap-2">
             {badges.map((b, i) => (
               <span key={i} className={`badge ${b.className}`}>
                 {b.label}

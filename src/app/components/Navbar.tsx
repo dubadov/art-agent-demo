@@ -64,7 +64,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </summary>
-      <div className="absolute left-0 mt-2 w-56 bg-[var(--color-surface)] rounded-xl shadow-2xl p-2 z-50">
+      <div className="absolute right-0 mt-2 w-56 bg-[var(--color-surface)] rounded-xl shadow-2xl p-2 z-50">
         {links.map((link) => (
           <Link
             key={link.href}
