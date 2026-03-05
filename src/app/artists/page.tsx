@@ -4,22 +4,33 @@ import Link from "next/link";
 import artists from "@/data/artists.json";
 import SearchFilter from "../components/SearchFilter";
 
-type ArtistItem = (typeof artists)[number] & { topFeatured?: boolean };
+type ArtistItem = (typeof artists)[number] & { topFeatured?: boolean; galleryImages?: string[] };
 
 const TOP_IDS = [3, 1, 4];
 const mediums = [...new Set(artists.flatMap((a) => a.medium.split(", ")))].sort();
 const mediumOptions = mediums.map((m) => ({ value: m, label: m }));
 
 function HeroCard({ artist }: { artist: ArtistItem }) {
+  const [imgErr, setImgErr] = useState(false);
   const initials = artist.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2);
+  const coverImage = artist.galleryImages?.[0];
 
   return (
     <Link href={`/artists/${artist.id}`} className="group">
       <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden card-hover">
         <div className="relative h-56 overflow-hidden">
-          <div className="image-placeholder w-full h-full text-4xl group-hover:scale-105 transition-transform duration-500">
-            {initials}
-          </div>
+          {coverImage && !imgErr ? (
+            <img
+              src={coverImage}
+              alt={artist.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={() => setImgErr(true)}
+            />
+          ) : (
+            <div className="image-placeholder w-full h-full text-4xl group-hover:scale-105 transition-transform duration-500">
+              {initials}
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-3 right-3 left-3 flex justify-between items-end">
             <span className="text-xs bg-black/50 text-white px-2 py-1 rounded-full backdrop-blur-sm">
@@ -71,18 +82,6 @@ export default function ArtistsPage() {
         </p>
       </div>
 
-      {/* Top 3 Hero */}
-      {!search && !medium && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">אמנים מובילים</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topArtists.map((a) => (
-              <HeroCard key={a.id} artist={a} />
-            ))}
-          </div>
-        </div>
-      )}
-
       <SearchFilter
         searchPlaceholder="חפש אמן לפי שם, מדיום..."
         searchValue={search}
@@ -96,6 +95,18 @@ export default function ArtistsPage() {
           },
         ]}
       />
+
+      {/* Top 3 Hero */}
+      {!search && !medium && (
+        <div className="mb-12">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">אמנים מובילים</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topArtists.map((a) => (
+              <HeroCard key={a.id} artist={a} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {remaining.length > 0 && (
         <>

@@ -5,7 +5,7 @@ import exhibitions from "@/data/exhibitions.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
 
-type ExhibitionItem = (typeof exhibitions)[number] & { topFeatured?: boolean };
+type ExhibitionItem = (typeof exhibitions)[number] & { topFeatured?: boolean; galleryImages?: string[] };
 
 const TOP_IDS = [4, 3, 1];
 const cities = [...new Set(exhibitions.map((e) => e.city))].sort();
@@ -26,15 +26,26 @@ function getStatusBadge(status: string) {
 }
 
 function HeroCard({ exhibition }: { exhibition: ExhibitionItem }) {
+  const [imgErr, setImgErr] = useState(false);
   const initials = exhibition.titleEn.split(" ").map((w) => w[0]).join("").slice(0, 2);
+  const coverImage = exhibition.galleryImages?.[0];
 
   return (
     <Link href={`/exhibitions/${exhibition.id}`} className="group">
       <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden card-hover">
         <div className="relative h-56 overflow-hidden">
-          <div className="image-placeholder w-full h-full text-3xl group-hover:scale-105 transition-transform duration-500">
-            {initials}
-          </div>
+          {coverImage && !imgErr ? (
+            <img
+              src={coverImage}
+              alt={exhibition.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={() => setImgErr(true)}
+            />
+          ) : (
+            <div className="image-placeholder w-full h-full text-3xl group-hover:scale-105 transition-transform duration-500">
+              {initials}
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-3 right-3 left-3 flex justify-between items-end">
             <span className={`text-xs px-2 py-1 rounded-full ${exhibition.status === "showing" ? "badge-showing" : "badge-upcoming"}`}>
@@ -90,18 +101,6 @@ export default function ExhibitionsPage() {
         </p>
       </div>
 
-      {/* Top 3 Hero */}
-      {!search && !city && !status && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">התערוכות המובילות</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topExhibitions.map((e) => (
-              <HeroCard key={e.id} exhibition={e} />
-            ))}
-          </div>
-        </div>
-      )}
-
       <SearchFilter
         searchPlaceholder="חפש תערוכה לפי שם, מקום..."
         searchValue={search}
@@ -121,6 +120,18 @@ export default function ExhibitionsPage() {
           },
         ]}
       />
+
+      {/* Top 3 Hero */}
+      {!search && !city && !status && (
+        <div className="mb-12">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">התערוכות המובילות</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topExhibitions.map((e) => (
+              <HeroCard key={e.id} exhibition={e} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {remaining.length > 0 && (
         <>

@@ -5,7 +5,7 @@ import galleries from "@/data/galleries.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
 
-type GalleryItem = (typeof galleries)[number] & { topFeatured?: boolean };
+type GalleryItem = (typeof galleries)[number] & { topFeatured?: boolean; galleryImages?: string[] };
 
 const TOP_IDS = [2, 12, 6];
 const regions = [...new Set(galleries.map((g) => g.region))].sort();
@@ -14,15 +14,26 @@ const types = [...new Set(galleries.map((g) => g.type))].sort();
 const typeOptions = types.map((t) => ({ value: t, label: t }));
 
 function HeroCard({ gallery }: { gallery: GalleryItem }) {
+  const [imgErr, setImgErr] = useState(false);
   const initials = gallery.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2);
+  const coverImage = gallery.galleryImages?.[0];
 
   return (
     <Link href={`/galleries/${gallery.id}`} className="group">
       <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden card-hover">
         <div className="relative h-56 overflow-hidden">
-          <div className="image-placeholder w-full h-full text-3xl group-hover:scale-105 transition-transform duration-500">
-            {initials}
-          </div>
+          {coverImage && !imgErr ? (
+            <img
+              src={coverImage}
+              alt={gallery.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={() => setImgErr(true)}
+            />
+          ) : (
+            <div className="image-placeholder w-full h-full text-3xl group-hover:scale-105 transition-transform duration-500">
+              {initials}
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-3 right-3 left-3 flex justify-between items-end">
             <span className="text-xs bg-purple-900/70 text-purple-200 px-2 py-1 rounded-full backdrop-blur-sm">
@@ -75,18 +86,6 @@ export default function GalleriesPage() {
         </p>
       </div>
 
-      {/* Top 3 Hero */}
-      {!search && !region && !type && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">הגלריות המובילות</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topGalleries.map((g) => (
-              <HeroCard key={g.id} gallery={g} />
-            ))}
-          </div>
-        </div>
-      )}
-
       <SearchFilter
         searchPlaceholder="חפש גלריה לפי שם, עיר..."
         searchValue={search}
@@ -106,6 +105,18 @@ export default function GalleriesPage() {
           },
         ]}
       />
+
+      {/* Top 3 Hero */}
+      {!search && !region && !type && (
+        <div className="mb-12">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">הגלריות המובילות</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topGalleries.map((g) => (
+              <HeroCard key={g.id} gallery={g} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {remaining.length > 0 && (
         <>

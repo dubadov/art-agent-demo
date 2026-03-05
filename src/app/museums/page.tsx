@@ -82,18 +82,6 @@ export default function MuseumsPage() {
         </p>
       </div>
 
-      {/* Top 3 Hero */}
-      {!search && !region && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">המוזיאונים המובילים</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topMuseums.map((m) => (
-              <HeroCard key={m.id} museum={m} />
-            ))}
-          </div>
-        </div>
-      )}
-
       <SearchFilter
         searchPlaceholder="חפש מוזיאון לפי שם, עיר..."
         searchValue={search}
@@ -107,6 +95,18 @@ export default function MuseumsPage() {
           },
         ]}
       />
+
+      {/* Top 3 Hero */}
+      {!search && !region && (
+        <div className="mb-12">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">המוזיאונים המובילים</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topMuseums.map((m) => (
+              <HeroCard key={m.id} museum={m} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {remaining.length > 0 && (
         <>
