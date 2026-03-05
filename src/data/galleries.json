@@ -29,6 +29,12 @@
     "descriptionEn": "One of Israel's most prominent galleries, representing leading Israeli and international artists with branches in Tel Aviv and Brussels.",
     "website": "https://www.dvirgallery.com",
     "address": "רחוב הארבעה 9, תל אביב",
+    "topFeatured": true,
+    "fullDescription": "גלריה דביר, שנוסדה על ידי נעמה דביר בשנת 1998, היא אחת הגלריות המשפיעות והמכובדות ביותר בישראל, עם סניפים בתל אביב ובבריסל. הגלריה מייצגת אמנים ישראלים ובינלאומיים מובילים ומשתתפת באופן קבוע בירידי אמנות בינלאומיים מובילים כמו Art Basel, Frieze ו-FIAC.\n\nהגלריה ממוקמת ברחוב הארבעה בתל אביב, באחד ממרכזי האמנות המרכזיים של העיר. המרחב מתאפיין בעיצוב מינימליסטי ונקי המאפשר ליצירות לדבר בעד עצמן.\n\nבין האמנים המיוצגים: איל אסולין, גיא בן נר, רועי רוזן, שרון יערי ועוד. הגלריה ידועה בתערוכות מעמיקות ובאוצרות איכותית.",
+    "fullDescriptionEn": "Dvir Gallery, founded by Naama Dvir in 1998, is one of Israel's most influential and respected galleries, with branches in Tel Aviv and Brussels. The gallery represents leading Israeli and international artists and regularly participates in major international art fairs such as Art Basel, Frieze and FIAC.\n\nThe gallery is located on HaArbaa Street in Tel Aviv, in one of the city's main art hubs. The space features minimalist, clean design that allows the works to speak for themselves.\n\nRepresented artists include Eyal Assulin, Guy Ben-Ner, Roee Rosen, Sharon Ya'ari and more. The gallery is known for in-depth exhibitions and quality curatorship.",
+    "galleryImages": ["https://images.unsplash.com/photo-1577720643272-265f09367456?w=800&h=500&fit=crop", "https://images.unsplash.com/photo-1594388551141-9e7e86527ce0?w=800&h=500&fit=crop"],
+    "highlights": ["נוסדה בשנת 1998 – מהגלריות המשפיעות בישראל", "סניפים בתל אביב ובבריסל", "משתתפת ב-Art Basel, Frieze ו-FIAC", "מייצגת אמנים ישראלים ובינלאומיים מובילים"],
+    "highlightsEn": ["Founded in 1998 — one of Israel's most influential galleries", "Branches in Tel Aviv and Brussels", "Participates in Art Basel, Frieze and FIAC", "Represents leading Israeli and international artists"],
     "featured": true
   },
   {
@@ -93,6 +99,12 @@
     "descriptionEn": "Leading center commissioning and promoting exhibitions by Israeli and international artists, focusing on video, performance and installation.",
     "website": "https://www.cca.org.il",
     "address": "רחוב מזא\"ה 5, תל אביב",
+    "topFeatured": true,
+    "fullDescription": "המרכז לאמנות עכשווית (CCA) בתל אביב, שנוסד בשנת 1998, הוא מוסד מוביל לאמנות עכשווית בישראל. המרכז מזמין, מייצר ומקדם תערוכות ופרויקטים של אמנים ישראלים ובינלאומיים, עם דגש מיוחד על אמנות וידאו, פרפורמנס ואינסטלציה.\n\nהמרכז ממוקם ברחוב מזא'ה בתל אביב וכולל שני חללי תצוגה: גלריה ראשית וחלל פרויקטים קטן יותר. CCA מציג כ-6 תערוכות בשנה, כל אחת מלווה בקטלוג, הרצאות ואירועים.\n\nCCA נחשב לאחד המוסדות החשובים ביותר לאמנות עכשווית בישראל ושותף קבוע של מוסדות אמנות בינלאומיים. המרכז שיחק תפקיד מרכזי בהצגת אמנות ניו מדיה ואמנות רב-תחומית בישראל.",
+    "fullDescriptionEn": "The Center for Contemporary Art (CCA) in Tel Aviv, founded in 1998, is a leading contemporary art institution in Israel. The center commissions, produces and promotes exhibitions and projects by Israeli and international artists, with special emphasis on video art, performance and installation.\n\nThe center is located on Mazeh Street in Tel Aviv and includes two exhibition spaces: a main gallery and a smaller project space. CCA presents approximately 6 exhibitions per year, each accompanied by a catalogue, lectures and events.\n\nCCA is considered one of the most important contemporary art institutions in Israel and a regular partner of international art institutions. The center has played a central role in presenting new media art and multidisciplinary art in Israel.",
+    "galleryImages": ["https://images.unsplash.com/photo-1531243269054-5ebf6f34081e?w=800&h=500&fit=crop", "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=800&h=500&fit=crop"],
+    "highlights": ["נוסד בשנת 1998 – מוסד מוביל לאמנות עכשווית", "דגש על וידאו, פרפורמנס ואינסטלציה", "כ-6 תערוכות בשנה עם קטלוגים", "שותף קבוע של מוסדות אמנות בינלאומיים"],
+    "highlightsEn": ["Founded in 1998 — leading contemporary art institution", "Emphasis on video, performance and installation", "Approximately 6 exhibitions per year with catalogues", "Regular partner of international art institutions"],
     "featured": true
   },
   {
@@ -189,6 +201,12 @@
     "descriptionEn": "One of Tel Aviv's oldest and most influential galleries, active since the 1960s, showing key Israeli artists.",
     "website": "https://www.gordongallery.co.il",
     "address": "רחוב הארבעה 6, תל אביב",
+    "topFeatured": true,
+    "fullDescription": "גלריה גורדון, שנוסדה בשנות ה-60, היא אחת הגלריות הוותיקות והמשפיעות ביותר בישראל. במשך למעלה מ-60 שנה, הגלריה הציגה את האמנים הישראלים המרכזיים ביותר ושיחקה תפקיד מפתח בעיצוב סצנת האמנות העכשווית בארץ.\n\nהגלריה עברה מרחוב גורדון המיתולוגי, שממנו קיבלה את שמה, למיקומה הנוכחי ברחוב הארבעה. היא ממשיכה להוות מרכז חיוני לאמנות ישראלית עכשווית, עם דגש על ציור, פיסול וצילום.\n\nגלריה גורדון משתתפת בירידי אמנות בינלאומיים ומייצגת אמנים ותיקים וצעירים כאחד, תוך שמירה על רמה גבוהה של אוצרות ותצוגה.",
+    "fullDescriptionEn": "Gordon Gallery, founded in the 1960s, is one of Israel's oldest and most influential galleries. For over 60 years, the gallery has exhibited Israel's most central artists and played a key role in shaping the contemporary art scene.\n\nThe gallery moved from its original location on the legendary Gordon Street, from which it takes its name, to its current location on HaArbaa Street. It continues to serve as a vital center for contemporary Israeli art, with emphasis on painting, sculpture and photography.\n\nGordon Gallery participates in international art fairs and represents both veteran and young artists, maintaining high standards of curatorship and display.",
+    "galleryImages": ["https://images.unsplash.com/photo-1572947650440-e8a97ef053b2?w=800&h=500&fit=crop", "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&h=500&fit=crop"],
+    "highlights": ["נוסדה בשנות ה-60 – מהגלריות הוותיקות בישראל", "למעלה מ-60 שנות פעילות רצופה", "תפקיד מפתח בעיצוב סצנת האמנות הישראלית", "משתתפת בירידי אמנות בינלאומיים"],
+    "highlightsEn": ["Founded in the 1960s — one of Israel's oldest galleries", "Over 60 years of continuous activity", "Key role in shaping the Israeli art scene", "Participates in international art fairs"],
     "featured": true
   },
   {
