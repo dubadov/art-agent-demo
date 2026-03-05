@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #1a1a2e;
+  --color-accent: #e94560;
+  --color-accent-light: #ff6b6b;
+  --color-surface: #16213e;
+  --color-surface-light: #0f3460;
+  --color-gold: #d4a574;
+  --color-text: #f5f5f5;
+  --color-text-muted: #a0a0b0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #e94560, #d4a574);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-showing {
+  background: #065f46;
+  color: #a7f3d0;
+}
+
+.badge-upcoming {
+  background: #92400e;
+  color: #fde68a;
+}
+
+.image-placeholder {
+  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4a574;
+  font-size: 2rem;
+  font-weight: 700;
+}
