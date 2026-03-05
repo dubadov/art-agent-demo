@@ -1,6 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import museums from "@/data/museums.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
@@ -76,7 +77,10 @@ export default function MuseumsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">🏛️ מוזיאונים בישראל</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+          <Image src="/icon-museums.png" alt="מוזיאונים" width={36} height={36} />
+          מוזיאונים בישראל
+        </h1>
         <p className="text-gray-500">
           {museums.length} מוזיאונים נמצאו על ידי הסוכן • מוצגים {filtered.length} תוצאות
         </p>

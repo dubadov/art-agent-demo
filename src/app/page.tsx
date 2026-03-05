@@ -7,11 +7,11 @@ import artists from "@/data/artists.json";
 import emails from "@/data/emails.json";
 
 const stats = [
-  { label: "מוזיאונים", value: museums.length, icon: "🏛️", href: "/museums", color: "from-indigo-500 to-purple-600" },
+  { label: "מוזיאונים", value: museums.length, icon: "/icon-museums.png", href: "/museums", color: "from-indigo-500 to-purple-600" },
   { label: "גלריות", value: galleries.length, icon: "/icon-galleries.png", href: "/galleries", color: "from-pink-500 to-rose-600" },
   { label: "תערוכות", value: exhibitions.length, icon: "/icon-exhibitions.png", href: "/exhibitions", color: "from-amber-500 to-orange-600" },
   { label: "אמנים", value: artists.length, icon: "/icon-artists.png", href: "/artists", color: "from-emerald-500 to-teal-600" },
-  { label: "טיוטות מייל", value: `${emails.length} / ${artists.length}`, icon: "📧", href: "/outreach", color: "from-sky-500 to-blue-600" },
+  { label: "טיוטות מייל", value: `${emails.length} / ${artists.length}`, icon: "/icon-outreach.png", href: "/outreach", color: "from-sky-500 to-blue-600" },
 ];
 
 export default function Home() {

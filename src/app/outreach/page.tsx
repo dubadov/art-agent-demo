@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import emails from "@/data/emails.json";
 import artists from "@/data/artists.json";
 
@@ -28,7 +29,10 @@ export default function OutreachPage() {
     <div className="max-w-5xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">📧 פנייה אוטומטית לאמנים</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+          <Image src="/icon-outreach.png" alt="פנייה" width={36} height={36} />
+          פנייה אוטומטית לאמנים
+        </h1>
         <p className="text-gray-500">
           הסוכן יוצר מייל מותאם אישית לכל אמן, מבוסס על מחקר מעמיק של היצירות והערכים שלו.
         </p>
