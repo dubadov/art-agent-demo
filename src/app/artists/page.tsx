@@ -13,11 +13,12 @@ const TOP_IDS = [3, 1, 4];
 const mediums = [...new Set(artists.flatMap((a) => a.medium.split(", ")))].sort();
 const mediumOptions = mediums.map((m) => ({ value: m, label: m }));
 
+// Hebrew art terms: Installation art = "מיצב" (mitzav). NEVER use "אינסטלציה" — that means plumbing.
 const ARTIST_SCHEMA = [
   { name: "id", type: "number", example: "1" },
   { name: "name", type: "string", example: '"יעל ברתנא"' },
   { name: "nameEn", type: "string", example: '"Yael Bartana"' },
-  { name: "medium / mediumEn", type: "string", example: '"וידאו, צילום"' },
+  { name: "medium / mediumEn", type: "string", example: '"וידאו, מיצב, צילום"' },
   { name: "bio / bioEn", type: "string" },
   { name: "website", type: "string?", example: '"https://..."' },
   { name: "wikipedia", type: "string?", example: '"https://en.wiki..."' },
