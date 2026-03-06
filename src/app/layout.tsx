@@ -3,8 +3,8 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 
 export const metadata: Metadata = {
-  title: "ArtAgent – גילוי אמנות ישראלית",
-  description: "פלטפורמה מבוססת AI לגילוי מוזיאונים, גלריות, תערוכות ואמנים ישראלים",
+  title: "ArtAgent Engine \u200E– מנוע AI לאמנות ישראלית",
+  description: "מנוע AI אוטונומי לגילוי, מיפוי והעשרת מוזיאונים, גלריות, תערוכות ואמנים ישראלים",
 };
 
 export default function RootLayout({
