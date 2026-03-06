@@ -142,7 +142,7 @@ constraints:
         </div>
       </EngineZone>
 
-      <OutputPreview label="EMAIL OUTPUT PREVIEW — Generated personalized outreach">
+      <OutputPreview label="רנדור פלט » תצוגה מקדימה — אימיילים מותאמים אישית שנוצרו">
         <div className="max-w-5xl mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">

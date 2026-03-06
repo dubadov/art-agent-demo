@@ -120,25 +120,27 @@ body {
 
 /* ---- Divider Bar ---- */
 .output-divider {
-  background: linear-gradient(90deg, var(--engine-border), rgba(34,211,238,0.2), var(--engine-border));
-  padding: 0.5rem 1.5rem;
+  background: linear-gradient(90deg, #0d1420, #112233, #0d1420);
+  border-top: 2px solid rgba(34,211,238,0.35);
+  border-bottom: 2px solid rgba(34,211,238,0.35);
+  padding: 1rem 2rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--engine-cyan);
+  justify-content: center;
+  gap: 1rem;
+  font-family: 'Heebo', 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #e2e8f0;
 }
 
 .output-divider::before,
 .output-divider::after {
   content: '';
   flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--engine-cyan), transparent);
-  opacity: 0.3;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34,211,238,0.45), transparent);
 }
 
 /* ---- Status Indicators ---- */
