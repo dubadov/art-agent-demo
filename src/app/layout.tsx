@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 
 export const metadata: Metadata = {
-  title: "ArtAgent Engine \u200E– מנוע AI לאמנות ישראלית",
+  title: "מנוע בינה מלאכותית למיפוי עולם האמנות הישראלית",
   description: "פלטפורמה מבוססת בינה מלאכותית לגילוי מוזיאונים, גלריות, תערוכות ואמנים ישראלים",
 };
 
