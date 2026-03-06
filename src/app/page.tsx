@@ -82,19 +82,19 @@ export default function Home() {
               step: "01",
               title: "סריקה אוטומטית",
               desc: "הסוכן סורק מאות אתרים, מנועי חיפוש ומאגרי מידע כדי למצוא כל מוזיאון, גלריה, תערוכה ואמן בישראל.",
-              engines: "Gemini • Tavily • Brave • EXA • Perplexity • Wikipedia",
+              engines: "Gemini • Tavily • Brave • EXA • Perplexity • Wikipedia • Claude • Groq Compound",
             },
             {
               step: "02",
               title: "ארגון וניתוח",
               desc: "המידע מאורגן אוטומטית לפי קטגוריות, אזורים, תאריכים ומדיום אמנותי. כל פריט מקבל תיאור מפורט.",
-              engines: "Claude • Gemini Pro • Jina Reader",
+              engines: "Claude • Gemini Pro • Jina Reader • Perplexity",
             },
             {
               step: "03",
               title: "פנייה מותאמת אישית",
               desc: "הסוכן יוצר מייל ייחודי לכל אמן, מבוסס על המחקר העמוק שנעשה על היצירות והערכים שלו.",
-              engines: "Gemini Pro • פנייה מותאמת • שליחה אוטומטית",
+              engines: "Gemini Pro • Claude • Perplexity • פנייה מותאמת • שליחה אוטומטית",
             },
           ].map((item) => (
             <div key={item.step} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
