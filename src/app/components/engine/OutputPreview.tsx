@@ -2,7 +2,7 @@ export default function OutputPreview({ children, label }: { children: React.Rea
   return (
     <>
       <div className="output-divider" dir="rtl">
-        <span>{label || "רנדור פלט » תצוגה מקדימה — מה שהמבקרים באתר יראו"}</span>
+        <span>{label || "רנדור פלט » תצוגה מקדימה — מה שהמבקרים באתר שלך יראו"}</span>
       </div>
       <div>{children}</div>
     </>
