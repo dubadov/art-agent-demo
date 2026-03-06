@@ -4,12 +4,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/", label: "Dashboard" },
-  { href: "/museums", label: "Museums Module" },
-  { href: "/galleries", label: "Galleries Module" },
-  { href: "/exhibitions", label: "Exhibitions Module" },
-  { href: "/artists", label: "Artists Module" },
-  { href: "/outreach", label: "Email Engine" },
+  { href: "/", label: "לוח בקרה" },
+  { href: "/museums", label: "מודול מוזיאונים" },
+  { href: "/galleries", label: "מודול גלריות" },
+  { href: "/exhibitions", label: "מודול תערוכות" },
+  { href: "/artists", label: "מודול אמנים" },
+  { href: "/outreach", label: "מנוע אימיילים" },
 ];
 
 export default function Navbar() {
