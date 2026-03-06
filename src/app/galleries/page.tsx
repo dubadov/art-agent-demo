@@ -5,6 +5,8 @@ import Image from "next/image";
 import galleries from "@/data/galleries.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
+import ModuleEngineZone from "../components/ModuleEngineZone";
+import OutputPreview from "../components/engine/OutputPreview";
 
 type GalleryItem = (typeof galleries)[number] & { topFeatured?: boolean; galleryImages?: string[] };
 
@@ -13,6 +15,37 @@ const regions = [...new Set(galleries.map((g) => g.region))].sort();
 const regionOptions = regions.map((r) => ({ value: r, label: r }));
 const types = [...new Set(galleries.map((g) => g.type))].sort();
 const typeOptions = types.map((t) => ({ value: t, label: t }));
+
+const GALLERY_SCHEMA = [
+  { name: "id", type: "number", example: "1" },
+  { name: "name", type: "string", example: '"גלריה שלוש"' },
+  { name: "nameEn", type: "string", example: '"Shalosh Gallery"' },
+  { name: "city / cityEn", type: "string", example: '"תל אביב"' },
+  { name: "region / regionEn", type: "string", example: '"מרכז"' },
+  { name: "type / typeEn", type: "string", example: '"אמנות עכשווית"' },
+  { name: "description / descriptionEn", type: "string" },
+  { name: "website", type: "string?", example: '"https://..."' },
+  { name: "address", type: "string", example: '"רחוב גורדון 15"' },
+  { name: "topFeatured", type: "boolean?" },
+  { name: "galleryImages", type: "string[]?" },
+];
+
+const GALLERY_SOURCES = [
+  { engine: "Tavily", role: "Discovery & scraping" },
+  { engine: "Jina Reader", role: "Content extraction" },
+  { engine: "Claude 3.5", role: "Description writing" },
+  { engine: "Gemini Pro", role: "Image sourcing" },
+  { engine: "Perplexity", role: "Verification" },
+];
+
+const GALLERY_COMPLETENESS = [
+  { label: "name (HE+EN)", pct: 100 },
+  { label: "description", pct: 100 },
+  { label: "website", pct: 93 },
+  { label: "address", pct: 100 },
+  { label: "galleryImages", pct: 40 },
+  { label: "type", pct: 100 },
+];
 
 function HeroCard({ gallery }: { gallery: GalleryItem }) {
   const [imgErr, setImgErr] = useState(false);
@@ -79,80 +112,86 @@ export default function GalleriesPage() {
   const remaining = filtered.filter((g) => !TOP_IDS.includes(g.id));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-          <Image src="/icon-galleries.png" alt="גלריות" width={36} height={36} />
-          גלריות אמנות בישראל
-        </h1>
-        <p className="text-gray-500">
-          {galleries.length} גלריות נמצאו על ידי הסוכן • מוצגות {filtered.length} תוצאות
-        </p>
-      </div>
-
-      <SearchFilter
-        searchPlaceholder="חפש גלריה לפי שם, עיר..."
-        searchValue={search}
-        onSearchChange={setSearch}
-        filters={[
-          {
-            label: "כל האזורים",
-            value: region,
-            options: regionOptions,
-            onChange: setRegion,
-          },
-          {
-            label: "כל הסוגים",
-            value: type,
-            options: typeOptions,
-            onChange: setType,
-          },
+    <div>
+      <ModuleEngineZone
+        moduleName="Galleries"
+        recordCount={galleries.length}
+        schemaTitle="Gallery Data Schema"
+        schemaFields={GALLERY_SCHEMA}
+        completenessItems={GALLERY_COMPLETENESS}
+        sources={GALLERY_SOURCES}
+        extraMetrics={[
+          { label: "Regions", value: regions.length },
+          { label: "Types", value: types.length },
         ]}
       />
 
-      {/* Top 3 Hero */}
-      {!search && !region && !type && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">הגלריות המובילות</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topGalleries.map((g) => (
-              <HeroCard key={g.id} gallery={g} />
-            ))}
+      <OutputPreview>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <Image src="/icon-galleries.png" alt="גלריות" width={36} height={36} />
+              גלריות אמנות בישראל
+            </h1>
+            <p className="text-gray-500">
+              {galleries.length} גלריות נמצאו על ידי הסוכן • מוצגות {filtered.length} תוצאות
+            </p>
           </div>
-        </div>
-      )}
 
-      {remaining.length > 0 && (
-        <>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            {search || region || type ? `תוצאות (${filtered.length})` : `כל הגלריות (${remaining.length})`}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(search || region || type ? filtered : remaining).map((g) => (
-              <ImageCard
-                key={g.id}
-                title={g.name}
-                subtitle={`${g.city} • ${g.type}`}
-                description={g.description}
-                initials={g.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2)}
-                badges={[{ label: g.type, className: "bg-purple-900/70 text-purple-200 backdrop-blur-sm" }]}
-                details={[
-                  { label: "שם באנגלית", value: g.nameEn },
-                  { label: "כתובת", value: g.address },
-                  ...(g.website ? [{ label: "אתר", value: g.website }] : []),
-                ]}
-              />
-            ))}
-          </div>
-        </>
-      )}
+          <SearchFilter
+            searchPlaceholder="חפש גלריה לפי שם, עיר..."
+            searchValue={search}
+            onSearchChange={setSearch}
+            filters={[
+              { label: "כל האזורים", value: region, options: regionOptions, onChange: setRegion },
+              { label: "כל הסוגים", value: type, options: typeOptions, onChange: setType },
+            ]}
+          />
 
-      {filtered.length === 0 && (
-        <div className="text-center py-20 text-gray-400">
-          <div className="text-5xl mb-4">🔍</div>
-          <p className="text-lg">לא נמצאו תוצאות</p>
+          {!search && !region && !type && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">הגלריות המובילות</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {topGalleries.map((g) => (
+                  <HeroCard key={g.id} gallery={g} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {remaining.length > 0 && (
+            <>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                {search || region || type ? `תוצאות (${filtered.length})` : `כל הגלריות (${remaining.length})`}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(search || region || type ? filtered : remaining).map((g) => (
+                  <ImageCard
+                    key={g.id}
+                    title={g.name}
+                    subtitle={`${g.city} • ${g.type}`}
+                    description={g.description}
+                    initials={g.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+                    badges={[{ label: g.type, className: "bg-purple-900/70 text-purple-200 backdrop-blur-sm" }]}
+                    details={[
+                      { label: "שם באנגלית", value: g.nameEn },
+                      { label: "כתובת", value: g.address },
+                      ...(g.website ? [{ label: "אתר", value: g.website }] : []),
+                    ]}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-20 text-gray-400">
+              <div className="text-5xl mb-4">🔍</div>
+              <p className="text-lg">לא נמצאו תוצאות</p>
+            </div>
+          )}
         </div>
-      )}
+      </OutputPreview>
     </div>
   );
 }

@@ -5,12 +5,45 @@ import Image from "next/image";
 import museums from "@/data/museums.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
+import ModuleEngineZone from "../components/ModuleEngineZone";
+import OutputPreview from "../components/engine/OutputPreview";
 
 type MuseumItem = (typeof museums)[number] & { topFeatured?: boolean };
 
 const TOP_IDS = [1, 2, 6];
 const regions = [...new Set(museums.map((m) => m.region))].sort();
 const regionOptions = regions.map((r) => ({ value: r, label: r }));
+
+const MUSEUM_SCHEMA = [
+  { name: "id", type: "number", example: "1" },
+  { name: "name", type: "string", example: '"מוזיאון ישראל"' },
+  { name: "nameEn", type: "string", example: '"Israel Museum"' },
+  { name: "city / cityEn", type: "string", example: '"ירושלים"' },
+  { name: "region / regionEn", type: "string", example: '"ירושלים"' },
+  { name: "description / descriptionEn", type: "string", example: '"המוזיאון הלאומי..."' },
+  { name: "website", type: "string?", example: '"https://imj.org.il"' },
+  { name: "image", type: "string?", example: '"https://upload..."' },
+  { name: "categories / categoriesEn", type: "string[]", example: '["ארכיאולוגיה","אמנות"]' },
+  { name: "visitors", type: "string?", example: '"1,000,000+"' },
+  { name: "topFeatured", type: "boolean?" },
+];
+
+const MUSEUM_SOURCES = [
+  { engine: "Tavily", role: "Discovery" },
+  { engine: "Brave Search", role: "Verification" },
+  { engine: "Gemini Pro", role: "Content enrichment" },
+  { engine: "Wikipedia", role: "Metadata" },
+  { engine: "Perplexity", role: "Fact-check" },
+];
+
+const MUSEUM_COMPLETENESS = [
+  { label: "name (HE+EN)", pct: 100 },
+  { label: "description", pct: 100 },
+  { label: "website", pct: 87 },
+  { label: "image", pct: 75 },
+  { label: "visitors", pct: 62 },
+  { label: "categories", pct: 100 },
+];
 
 function HeroCard({ museum }: { museum: MuseumItem }) {
   const [imgErr, setImgErr] = useState(false);
@@ -75,76 +108,89 @@ export default function MuseumsPage() {
   const remaining = filtered.filter((m) => !TOP_IDS.includes(m.id));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-          <Image src="/icon-museums.png" alt="מוזיאונים" width={36} height={36} />
-          מוזיאונים בישראל
-        </h1>
-        <p className="text-gray-500">
-          {museums.length} מוזיאונים נמצאו על ידי הסוכן • מוצגים {filtered.length} תוצאות
-        </p>
-      </div>
-
-      <SearchFilter
-        searchPlaceholder="חפש מוזיאון לפי שם, עיר..."
-        searchValue={search}
-        onSearchChange={setSearch}
-        filters={[
-          {
-            label: "כל האזורים",
-            value: region,
-            options: regionOptions,
-            onChange: setRegion,
-          },
-        ]}
+    <div>
+      <ModuleEngineZone
+        moduleName="Museums"
+        recordCount={museums.length}
+        schemaTitle="Museum Data Schema"
+        schemaFields={MUSEUM_SCHEMA}
+        completenessItems={MUSEUM_COMPLETENESS}
+        sources={MUSEUM_SOURCES}
+        extraMetrics={[{ label: "Regions", value: regions.length }]}
       />
 
-      {/* Top 3 Hero */}
-      {!search && !region && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">המוזיאונים המובילים</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topMuseums.map((m) => (
-              <HeroCard key={m.id} museum={m} />
-            ))}
+      <OutputPreview>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <Image src="/icon-museums.png" alt="מוזיאונים" width={36} height={36} />
+              מוזיאונים בישראל
+            </h1>
+            <p className="text-gray-500">
+              {museums.length} מוזיאונים נמצאו על ידי הסוכן • מוצגים {filtered.length} תוצאות
+            </p>
           </div>
-        </div>
-      )}
 
-      {remaining.length > 0 && (
-        <>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            {search || region ? `תוצאות (${filtered.length})` : `כל המוזיאונים (${remaining.length})`}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(search || region ? filtered : remaining).map((m) => (
-              <ImageCard
-                key={m.id}
-                title={m.name}
-                subtitle={`${m.city} • ${m.region}`}
-                description={m.description}
-                image={m.image}
-                initials={m.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2)}
-                badges={m.visitors ? [{ label: `${m.visitors} מבקרים`, className: "bg-black/50 text-white backdrop-blur-sm" }] : []}
-                details={[
-                  { label: "שם באנגלית", value: m.nameEn },
-                  { label: "קטגוריות", value: m.categories.join(", ") },
-                  ...(m.website ? [{ label: "אתר", value: m.website }] : []),
-                ]}
-              />
-            ))}
-          </div>
-        </>
-      )}
+          <SearchFilter
+            searchPlaceholder="חפש מוזיאון לפי שם, עיר..."
+            searchValue={search}
+            onSearchChange={setSearch}
+            filters={[
+              {
+                label: "כל האזורים",
+                value: region,
+                options: regionOptions,
+                onChange: setRegion,
+              },
+            ]}
+          />
 
-      {filtered.length === 0 && (
-        <div className="text-center py-20 text-gray-400">
-          <div className="text-5xl mb-4">🔍</div>
-          <p className="text-lg">לא נמצאו תוצאות</p>
-          <p className="text-sm mt-2">נסה לשנות את החיפוש או הסינון</p>
+          {!search && !region && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">המוזיאונים המובילים</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {topMuseums.map((m) => (
+                  <HeroCard key={m.id} museum={m} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {remaining.length > 0 && (
+            <>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                {search || region ? `תוצאות (${filtered.length})` : `כל המוזיאונים (${remaining.length})`}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(search || region ? filtered : remaining).map((m) => (
+                  <ImageCard
+                    key={m.id}
+                    title={m.name}
+                    subtitle={`${m.city} • ${m.region}`}
+                    description={m.description}
+                    image={m.image}
+                    initials={m.nameEn.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+                    badges={m.visitors ? [{ label: `${m.visitors} מבקרים`, className: "bg-black/50 text-white backdrop-blur-sm" }] : []}
+                    details={[
+                      { label: "שם באנגלית", value: m.nameEn },
+                      { label: "קטגוריות", value: m.categories.join(", ") },
+                      ...(m.website ? [{ label: "אתר", value: m.website }] : []),
+                    ]}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-20 text-gray-400">
+              <div className="text-5xl mb-4">🔍</div>
+              <p className="text-lg">לא נמצאו תוצאות</p>
+              <p className="text-sm mt-2">נסה לשנות את החיפוש או הסינון</p>
+            </div>
+          )}
         </div>
-      )}
+      </OutputPreview>
     </div>
   );
 }

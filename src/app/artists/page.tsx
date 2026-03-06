@@ -4,12 +4,49 @@ import Link from "next/link";
 import Image from "next/image";
 import artists from "@/data/artists.json";
 import SearchFilter from "../components/SearchFilter";
+import ModuleEngineZone from "../components/ModuleEngineZone";
+import OutputPreview from "../components/engine/OutputPreview";
 
 type ArtistItem = (typeof artists)[number] & { topFeatured?: boolean; galleryImages?: string[] };
 
 const TOP_IDS = [3, 1, 4];
 const mediums = [...new Set(artists.flatMap((a) => a.medium.split(", ")))].sort();
 const mediumOptions = mediums.map((m) => ({ value: m, label: m }));
+
+const ARTIST_SCHEMA = [
+  { name: "id", type: "number", example: "1" },
+  { name: "name", type: "string", example: '"יעל ברתנא"' },
+  { name: "nameEn", type: "string", example: '"Yael Bartana"' },
+  { name: "medium / mediumEn", type: "string", example: '"וידאו, צילום"' },
+  { name: "bio / bioEn", type: "string" },
+  { name: "website", type: "string?", example: '"https://..."' },
+  { name: "wikipedia", type: "string?", example: '"https://en.wiki..."' },
+  { name: "email", type: "string?", example: '"studio@..."' },
+  { name: "notableWorks", type: "string[]", example: '["Stones","Data Zone"]' },
+  { name: "featured", type: "boolean" },
+  { name: "topFeatured", type: "boolean?" },
+  { name: "galleryImages", type: "string[]?" },
+];
+
+const ARTIST_SOURCES = [
+  { engine: "Tavily", role: "Artist discovery" },
+  { engine: "Wikipedia", role: "Biography & works" },
+  { engine: "Brave Search", role: "Contact info" },
+  { engine: "Claude 3.5", role: "Bio writing & translation" },
+  { engine: "Perplexity", role: "Cross-verification" },
+  { engine: "Gemini Pro", role: "Image curation" },
+];
+
+const ARTIST_COMPLETENESS = [
+  { label: "name (HE+EN)", pct: 100 },
+  { label: "bio (HE+EN)", pct: 100 },
+  { label: "medium", pct: 100 },
+  { label: "email", pct: 80 },
+  { label: "website", pct: 73 },
+  { label: "wikipedia", pct: 87 },
+  { label: "notableWorks", pct: 100 },
+  { label: "galleryImages", pct: 27 },
+];
 
 function HeroCard({ artist }: { artist: ArtistItem }) {
   const [imgErr, setImgErr] = useState(false);
@@ -74,68 +111,81 @@ export default function ArtistsPage() {
 
   const remaining = filtered.filter((a) => !TOP_IDS.includes(a.id));
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-          <Image src="/icon-artists.png" alt="אמנים" width={36} height={36} />
-          אמנים ישראלים מובילים
-        </h1>
-        <p className="text-gray-500">
-          {artists.length} אמנים נמצאו על ידי הסוכן • מוצגים {filtered.length} תוצאות
-        </p>
-      </div>
+  const withEmail = artists.filter((a) => a.email).length;
 
-      <SearchFilter
-        searchPlaceholder="חפש אמן לפי שם, מדיום..."
-        searchValue={search}
-        onSearchChange={setSearch}
-        filters={[
-          {
-            label: "כל המדיומים",
-            value: medium,
-            options: mediumOptions,
-            onChange: setMedium,
-          },
+  return (
+    <div>
+      <ModuleEngineZone
+        moduleName="Artists"
+        recordCount={artists.length}
+        schemaTitle="Artist Data Schema"
+        schemaFields={ARTIST_SCHEMA}
+        completenessItems={ARTIST_COMPLETENESS}
+        sources={ARTIST_SOURCES}
+        extraMetrics={[
+          { label: "With Email", value: withEmail, color: "var(--engine-green)" },
+          { label: "Mediums", value: mediums.length },
         ]}
       />
 
-      {/* Top 3 Hero */}
-      {!search && !medium && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">אמנים מובילים</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topArtists.map((a) => (
-              <HeroCard key={a.id} artist={a} />
-            ))}
+      <OutputPreview>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <Image src="/icon-artists.png" alt="אמנים" width={36} height={36} />
+              אמנים ישראלים מובילים
+            </h1>
+            <p className="text-gray-500">
+              {artists.length} אמנים נמצאו על ידי הסוכן • מוצגים {filtered.length} תוצאות
+            </p>
           </div>
-        </div>
-      )}
 
-      {remaining.length > 0 && (
-        <>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            {search || medium ? `תוצאות (${filtered.length})` : `כל האמנים (${remaining.length})`}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {(search || medium ? filtered : remaining).map((a) => (
-              <ArtistCard
-                key={a.id}
-                artist={a}
-                expanded={expandedId === a.id}
-                onToggle={() => setExpandedId(expandedId === a.id ? null : a.id)}
-              />
-            ))}
-          </div>
-        </>
-      )}
+          <SearchFilter
+            searchPlaceholder="חפש אמן לפי שם, מדיום..."
+            searchValue={search}
+            onSearchChange={setSearch}
+            filters={[
+              { label: "כל המדיומים", value: medium, options: mediumOptions, onChange: setMedium },
+            ]}
+          />
 
-      {filtered.length === 0 && (
-        <div className="text-center py-20 text-gray-400">
-          <div className="text-5xl mb-4">🔍</div>
-          <p className="text-lg">לא נמצאו תוצאות</p>
+          {!search && !medium && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">אמנים מובילים</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {topArtists.map((a) => (
+                  <HeroCard key={a.id} artist={a} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {remaining.length > 0 && (
+            <>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                {search || medium ? `תוצאות (${filtered.length})` : `כל האמנים (${remaining.length})`}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {(search || medium ? filtered : remaining).map((a) => (
+                  <ArtistCard
+                    key={a.id}
+                    artist={a}
+                    expanded={expandedId === a.id}
+                    onToggle={() => setExpandedId(expandedId === a.id ? null : a.id)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-20 text-gray-400">
+              <div className="text-5xl mb-4">🔍</div>
+              <p className="text-lg">לא נמצאו תוצאות</p>
+            </div>
+          )}
         </div>
-      )}
+      </OutputPreview>
     </div>
   );
 }

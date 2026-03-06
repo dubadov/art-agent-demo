@@ -5,6 +5,8 @@ import Image from "next/image";
 import exhibitions from "@/data/exhibitions.json";
 import SearchFilter from "../components/SearchFilter";
 import ImageCard from "../components/ImageCard";
+import ModuleEngineZone from "../components/ModuleEngineZone";
+import OutputPreview from "../components/engine/OutputPreview";
 
 type ExhibitionItem = (typeof exhibitions)[number] & { topFeatured?: boolean; galleryImages?: string[] };
 
@@ -14,6 +16,37 @@ const cityOptions = cities.map((c) => ({ value: c, label: c }));
 const statuses = [
   { value: "showing", label: "מוצג כעת" },
   { value: "upcoming", label: "בקרוב" },
+];
+
+const EXHIBITION_SCHEMA = [
+  { name: "id", type: "number", example: "1" },
+  { name: "title / titleEn", type: "string", example: '"סוף יום: 100 שנה..."' },
+  { name: "venue / venueEn", type: "string", example: '"מוזיאון תל אביב"' },
+  { name: "city / cityEn", type: "string" },
+  { name: "startDate", type: "date", example: '"2026-03-15"' },
+  { name: "endDate", type: "date", example: '"2026-08-30"' },
+  { name: "description / descriptionEn", type: "string" },
+  { name: "categories / categoriesEn", type: "string[]" },
+  { name: "status", type: '"showing" | "upcoming"' },
+  { name: "topFeatured", type: "boolean?" },
+  { name: "galleryImages", type: "string[]?" },
+];
+
+const EXHIBITION_SOURCES = [
+  { engine: "Tavily", role: "Event discovery" },
+  { engine: "Brave Search", role: "Date verification" },
+  { engine: "Gemini Pro", role: "Description & categorization" },
+  { engine: "Jina Reader", role: "Venue page extraction" },
+  { engine: "Claude 3.5", role: "Content synthesis" },
+];
+
+const EXHIBITION_COMPLETENESS = [
+  { label: "title (HE+EN)", pct: 100 },
+  { label: "venue", pct: 100 },
+  { label: "dates", pct: 100 },
+  { label: "description", pct: 100 },
+  { label: "galleryImages", pct: 45 },
+  { label: "categories", pct: 100 },
 ];
 
 function formatDate(dateStr: string) {
@@ -93,83 +126,91 @@ export default function ExhibitionsPage() {
 
   const remaining = filtered.filter((e) => !TOP_IDS.includes(e.id));
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-          <Image src="/icon-exhibitions.png" alt="תערוכות" width={36} height={36} />
-          תערוכות אמנות 2026
-        </h1>
-        <p className="text-gray-500">
-          {exhibitions.length} תערוכות נמצאו על ידי הסוכן • מוצגות {filtered.length} תוצאות
-        </p>
-      </div>
+  const showingCount = exhibitions.filter((e) => e.status === "showing").length;
 
-      <SearchFilter
-        searchPlaceholder="חפש תערוכה לפי שם, מקום..."
-        searchValue={search}
-        onSearchChange={setSearch}
-        filters={[
-          {
-            label: "כל הערים",
-            value: city,
-            options: cityOptions,
-            onChange: setCity,
-          },
-          {
-            label: "כל הסטטוסים",
-            value: status,
-            options: statuses,
-            onChange: setStatus,
-          },
+  return (
+    <div>
+      <ModuleEngineZone
+        moduleName="Exhibitions"
+        recordCount={exhibitions.length}
+        schemaTitle="Exhibition Data Schema"
+        schemaFields={EXHIBITION_SCHEMA}
+        completenessItems={EXHIBITION_COMPLETENESS}
+        sources={EXHIBITION_SOURCES}
+        extraMetrics={[
+          { label: "Showing Now", value: showingCount, color: "var(--engine-green)" },
+          { label: "Cities", value: cities.length },
         ]}
       />
 
-      {/* Top 3 Hero */}
-      {!search && !city && !status && (
-        <div className="mb-12">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">התערוכות המובילות</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topExhibitions.map((e) => (
-              <HeroCard key={e.id} exhibition={e} />
-            ))}
+      <OutputPreview>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <Image src="/icon-exhibitions.png" alt="תערוכות" width={36} height={36} />
+              תערוכות אמנות 2026
+            </h1>
+            <p className="text-gray-500">
+              {exhibitions.length} תערוכות נמצאו על ידי הסוכן • מוצגות {filtered.length} תוצאות
+            </p>
           </div>
-        </div>
-      )}
 
-      {remaining.length > 0 && (
-        <>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            {search || city || status ? `תוצאות (${filtered.length})` : `כל התערוכות (${remaining.length})`}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(search || city || status ? filtered : remaining).map((e) => (
-              <ImageCard
-                key={e.id}
-                title={e.title}
-                subtitle={e.venue}
-                description={e.description}
-                initials={e.titleEn.split(" ").map((w) => w[0]).join("").slice(0, 2)}
-                badges={[getStatusBadge(e.status)]}
-                details={[
-                  { label: "שם באנגלית", value: e.titleEn },
-                  { label: "עיר", value: e.city },
-                  { label: "תאריך פתיחה", value: formatDate(e.startDate) },
-                  { label: "תאריך סיום", value: formatDate(e.endDate) },
-                  { label: "קטגוריות", value: e.categories.join(", ") },
-                ]}
-              />
-            ))}
-          </div>
-        </>
-      )}
+          <SearchFilter
+            searchPlaceholder="חפש תערוכה לפי שם, מקום..."
+            searchValue={search}
+            onSearchChange={setSearch}
+            filters={[
+              { label: "כל הערים", value: city, options: cityOptions, onChange: setCity },
+              { label: "כל הסטטוסים", value: status, options: statuses, onChange: setStatus },
+            ]}
+          />
 
-      {filtered.length === 0 && (
-        <div className="text-center py-20 text-gray-400">
-          <div className="text-5xl mb-4">🔍</div>
-          <p className="text-lg">לא נמצאו תוצאות</p>
+          {!search && !city && !status && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">התערוכות המובילות</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {topExhibitions.map((e) => (
+                  <HeroCard key={e.id} exhibition={e} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {remaining.length > 0 && (
+            <>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                {search || city || status ? `תוצאות (${filtered.length})` : `כל התערוכות (${remaining.length})`}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(search || city || status ? filtered : remaining).map((e) => (
+                  <ImageCard
+                    key={e.id}
+                    title={e.title}
+                    subtitle={e.venue}
+                    description={e.description}
+                    initials={e.titleEn.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+                    badges={[getStatusBadge(e.status)]}
+                    details={[
+                      { label: "שם באנגלית", value: e.titleEn },
+                      { label: "עיר", value: e.city },
+                      { label: "תאריך פתיחה", value: formatDate(e.startDate) },
+                      { label: "תאריך סיום", value: formatDate(e.endDate) },
+                      { label: "קטגוריות", value: e.categories.join(", ") },
+                    ]}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-20 text-gray-400">
+              <div className="text-5xl mb-4">🔍</div>
+              <p className="text-lg">לא נמצאו תוצאות</p>
+            </div>
+          )}
         </div>
-      )}
+      </OutputPreview>
     </div>
   );
 }
