@@ -16,7 +16,7 @@ export default function SchemaViewer({
   fields: SchemaField[];
   recordCount: number;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   return (
     <div className="engine-panel">

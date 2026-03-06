@@ -39,7 +39,7 @@ export default function OutreachPage() {
   const [showAutoSendModal, setShowAutoSendModal] = useState(false);
   const [sentEmails, setSentEmails] = useState<Record<number, boolean>>({});
   const [regenerating, setRegenerating] = useState<Record<number, boolean>>({});
-  const [expandedTrace, setExpandedTrace] = useState<number | null>(null);
+  const [expandedTrace, setExpandedTrace] = useState<number | null>(emails[0]?.id ?? null);
 
   const remainingArtists = artists.length - emails.length;
 
